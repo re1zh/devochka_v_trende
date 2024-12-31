@@ -1,34 +1,29 @@
 import socket
 import pygame
 
-# Настройки клиента
-SERVER_HOST = '79.137.184.21'  # IP-адрес сервера
-SERVER_PORT = 8000       # Порт сервера
+SERVER_HOST = '192.168.0.161'
+SERVER_PORT = 27007
 
-# Инициализация аудиосистемы
 pygame.mixer.init()
 song_path = 'lion.mp3'
 pygame.mixer.music.load(song_path)
 
-# Подключение к серверу
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((SERVER_HOST, SERVER_PORT))
-print(f"✅ Подключено к серверу {SERVER_HOST}:{SERVER_PORT}")
+print(f"Connected to server {SERVER_HOST}:{SERVER_PORT}")
 
-# Функция для управления воспроизведением
 is_playing = False
 
 def toggle_song():
     global is_playing
     if is_playing:
         pygame.mixer.music.stop()
-        print("⏹️ Песня остановлена.")
+        print("Stopped.")
     else:
         pygame.mixer.music.play()
-        print("🎵 Песня начала воспроизводиться.")
+        print("Playing.")
     is_playing = not is_playing
 
-# Получение команд от сервера
 try:
     while True:
         command = client_socket.recv(1024).decode()
@@ -36,8 +31,8 @@ try:
             toggle_song()
         elif command == 'STOP':
             pygame.mixer.music.stop()
-            print("⏹️ Остановлено по команде сервера.")
+            print("Stopped from server.")
 except KeyboardInterrupt:
-    print("🚪 Отключение от сервера.")
+    print("Disconnected.")
 finally:
     client_socket.close()
