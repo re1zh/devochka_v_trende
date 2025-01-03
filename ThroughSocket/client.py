@@ -5,7 +5,7 @@ SERVER_HOST = '192.168.0.161'
 SERVER_PORT = 27007
 
 pygame.mixer.init()
-song_path = 'lion.mp3'
+song_path = '../lion.mp3'
 pygame.mixer.music.load(song_path)
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
