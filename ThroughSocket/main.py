@@ -2,7 +2,7 @@ import pygame
 from pynput import keyboard
 
 pygame.mixer.init()
-song_path = 'lion.mp3'
+song_path = '../lion.mp3'
 pygame.mixer.music.load(song_path)
 
 is_playing = False
