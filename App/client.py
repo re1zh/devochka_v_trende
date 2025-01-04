@@ -1,7 +1,7 @@
 import socket
 import pygame
 
-SERVER_HOST = '192.168.0.161'
+SERVER_HOST = '192.168.0.163'
 SERVER_PORT = 27007
 
 pygame.mixer.init()
