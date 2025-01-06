@@ -71,10 +71,15 @@ async def play(ctx, sound: str):
             is_playing = False
             await ctx.send("Stopped.")
         elif os.path.isfile(sound_file):
-            # Введите свой путь до библиотеки libopus
-            discord.opus.load_opus('/opt/homebrew/lib/libopus.dylib')
+            # Если ваша система не Windows, то раскомментируйте строку ниже и введите свой путь до библиотеки libopus
+            # discord.opus.load_opus()
             ctx.voice_client.stop()
-            ctx.voice_client.play(discord.FFmpegPCMAudio(sound_file, options='-loglevel quiet'))
+            ctx.voice_client.play(
+                discord.FFmpegPCMAudio(sound_file
+                    , options='-loglevel quiet'
+                    # Если ваша система Windows, то введите путь до файла ffmpeg.exe
+                    , executable="c:\\ffmpeg-master-latest-win64-gpl\\bin\\ffmpeg.exe")
+            )
             is_playing = True
             await ctx.send(f"Playing: **{sound}**")
         else:
