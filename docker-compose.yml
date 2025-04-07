@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: discord_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: re1zh
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: discord_bot
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  bot:
+    build: ./bot
+    container_name: discord_bot
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DISCORD_TOKEN: token_here
+      WEBHOOK_URL: webhook_here
+      POSTGRES_USER: re1zh
+      POSTGRES_PASS: 12345
+      HOST: db
+      PORT: 5432
+      DATABASE: discord_bot
+
+volumes:
+  pgdata:

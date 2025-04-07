@@ -1,4 +1,6 @@
 discord.py
 pynput
 requests
-ffmpeg
+sqlalchemy
+psycopg2-binary
+pynacl
