@@ -1,5 +1,4 @@
 discord.py
-pynput
 requests
 sqlalchemy
 psycopg2-binary

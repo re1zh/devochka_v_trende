@@ -6,7 +6,7 @@ import threading
 import platform
 
 from discord.ext import commands
-from pynput import keyboard
+# from pynput import keyboard
 
 from database import SessionLocal, Song
 
@@ -17,20 +17,20 @@ intents.message_content = True
 intents.voice_states = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-key_binds = {}
+# key_binds = {}
 
-@bot.command()
-async def bindkey(ctx, key: str, song_name: str):
-    db = SessionLocal()
-    song = db.query(Song).filter(Song.name == song_name).first()
-    db.close()
-
-    if not song:
-        await ctx.send(f"Песня '{song_name}' не найдена в базе данных.")
-        return
-
-    key_binds[key] = song_name
-    await ctx.send(f"Клавиша `{key}` теперь воспроизводит `{song_name}`.")
+# @bot.command()
+# async def bindkey(ctx, key: str, song_name: str):
+#     db = SessionLocal()
+#     song = db.query(Song).filter(Song.name == song_name).first()
+#     db.close()
+#
+#     if not song:
+#         await ctx.send(f"Песня '{song_name}' не найдена в базе данных.")
+#         return
+#
+#     key_binds[key] = song_name
+#     await ctx.send(f"Клавиша `{key}` теперь воспроизводит `{song_name}`.")
 
 try:
     with open('config.json') as config_file:
@@ -189,14 +189,14 @@ async def resume(ctx):
         await ctx.send("Нечего возобновлять.")
 
 
-def on_key_press(key):
-    try:
-        if hasattr(key, 'char') and key.char in key_binds:
-            send_command_via_webhook(f"!play {key_binds[key.char]}")
-        elif key.char == '/':
-            send_command_via_webhook("!pause" if is_playing else "!resume")
-    except AttributeError:
-        pass
+# def on_key_press(key):
+#     try:
+#         if hasattr(key, 'char') and key.char in key_binds:
+#             send_command_via_webhook(f"!play {key_binds[key.char]}")
+#         elif key.char == '/':
+#             send_command_via_webhook("!pause" if is_playing else "!resume")
+#     except AttributeError:
+#         pass
 
 def send_command_via_webhook(command):
     data = {"content": command}
@@ -206,11 +206,11 @@ def send_command_via_webhook(command):
     else:
         print(f"Ошибка: {response.status_code}, {response.text}")
 
-def start_keyboard_listener():
-    with keyboard.Listener(on_press=on_key_press) as listener:
-        listener.join()
+# def start_keyboard_listener():
+#     with keyboard.Listener(on_press=on_key_press) as listener:
+#         listener.join()
 
-listener_thread = threading.Thread(target=start_keyboard_listener, daemon=True)
-listener_thread.start()
+# listener_thread = threading.Thread(target=start_keyboard_listener, daemon=True)
+# listener_thread.start()
 
 bot.run(TOKEN)
