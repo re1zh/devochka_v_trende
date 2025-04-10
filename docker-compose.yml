@@ -28,6 +28,8 @@ services:
       HOST: db
       PORT: 5432
       DATABASE: discord_bot
+    volumes:
+      - /home/re1zh/Desktop/devochka_v_trende/music:/app/music
 
 volumes:
   pgdata:

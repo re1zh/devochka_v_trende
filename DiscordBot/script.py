@@ -148,11 +148,15 @@ async def play(ctx, name: str):
             if SYSTEM_OS == "Windows":
                 ffmpeg_path = "C:\\ffmpeg-master-latest-win64-gpl\\bin\\ffmpeg.exe"
                 executable_option = {"executable": ffmpeg_path}
-            else:
+            elif platform.system() == "Darwin":
                 opus_path = "/opt/homebrew/lib/libopus.dylib"
                 discord.opus.load_opus(opus_path)
                 executable_option = {}
-
+            else:
+                try:
+                    discord.opus.load_opus("libopus.so.0")
+                except Exception as error:
+                    print(f"Не удалось загрузить Opus: {error}")
             ctx.voice_client.play(
                 discord.FFmpegPCMAudio(song.path, options='-loglevel quiet', **executable_option)
             )
