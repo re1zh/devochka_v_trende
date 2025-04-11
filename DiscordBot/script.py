@@ -32,18 +32,10 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 #     key_binds[key] = song_name
 #     await ctx.send(f"Клавиша `{key}` теперь воспроизводит `{song_name}`.")
 
-try:
-    with open('config.json') as config_file:
-        config = json.load(config_file)
+TOKEN = os.getenv("DISCORD_TOKEN")
 
-    TOKEN = config.get('DISCORD_TOKEN')
-    WEBHOOK_URL = config.get('WEBHOOK_URL')
-
-    if not TOKEN or not WEBHOOK_URL:
-        raise ValueError("Укажите DISCORD_TOKEN и WEBHOOK_URL в config.json")
-
-except Exception as e:
-    raise ValueError(f"Ошибка при загрузке конфигурации: {str(e)}")
+if not TOKEN:
+    raise ValueError("Укажите DISCORD_TOKEN через переменные окружения.")
 
 is_playing = False
 is_paused = False
@@ -148,7 +140,7 @@ async def play(ctx, name: str):
             if SYSTEM_OS == "Windows":
                 ffmpeg_path = "C:\\ffmpeg-master-latest-win64-gpl\\bin\\ffmpeg.exe"
                 executable_option = {"executable": ffmpeg_path}
-            elif platform.system() == "Darwin":
+            elif SYSTEM_OS == "Darwin":
                 opus_path = "/opt/homebrew/lib/libopus.dylib"
                 discord.opus.load_opus(opus_path)
                 executable_option = {}
@@ -157,6 +149,7 @@ async def play(ctx, name: str):
                     discord.opus.load_opus("libopus.so.0")
                 except Exception as error:
                     print(f"Не удалось загрузить Opus: {error}")
+                executable_option = {}
             ctx.voice_client.play(
                 discord.FFmpegPCMAudio(song.path, options='-loglevel quiet', **executable_option)
             )
@@ -202,13 +195,13 @@ async def resume(ctx):
 #     except AttributeError:
 #         pass
 
-def send_command_via_webhook(command):
-    data = {"content": command}
-    response = requests.post(WEBHOOK_URL, json=data)
-    if response.status_code == 204:
-        print(f"Команда '{command}' отправлена через вебхук.")
-    else:
-        print(f"Ошибка: {response.status_code}, {response.text}")
+# def send_command_via_webhook(command):
+#     data = {"content": command}
+#     response = requests.post(WEBHOOK_URL, json=data)
+#     if response.status_code == 204:
+#         print(f"Команда '{command}' отправлена через вебхук.")
+#     else:
+#         print(f"Ошибка: {response.status_code}, {response.text}")
 
 # def start_keyboard_listener():
 #     with keyboard.Listener(on_press=on_key_press) as listener:

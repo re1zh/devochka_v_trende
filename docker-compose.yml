@@ -15,14 +15,14 @@ services:
       - "5432:5432"
 
   bot:
-    build: ./bot
+    build: ./DiscordBot
     container_name: discord_bot
     restart: always
     depends_on:
       - db
     environment:
-      DISCORD_TOKEN: token_here
-      WEBHOOK_URL: webhook_here
+      DISCORD_TOKEN: token
+      WEBHOOK_URL: webhook
       POSTGRES_USER: re1zh
       POSTGRES_PASS: 12345
       HOST: db
